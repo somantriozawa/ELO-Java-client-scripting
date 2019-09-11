@@ -1,0 +1,5 @@
+function eloIndexDialogSetDocMask(){
+  if(indexDialog.docMaskId == 26 && indexDialog.id < 0){ //26 = maskno
+    indexDialog.setObjKeyValue(0, workspace.userName);
+  }
+}
