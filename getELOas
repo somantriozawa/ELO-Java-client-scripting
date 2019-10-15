@@ -1,0 +1,5 @@
+function eloScriptButton69Start() {
+  workspace.getELOas("trie-hp", 9070, "as-ELOarchive", true, false, "bjp.acl.direct");
+  //bjp.acl.direct: ELOas direct name
+  workspace.setFeedbackMessage("Setting permission completed");
+}
