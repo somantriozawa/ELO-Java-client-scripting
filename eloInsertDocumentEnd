@@ -1,0 +1,4 @@
+function eloInsertDocumentEnd(){
+	workspace.getELOas("trie-hp", 9070, "as-ELOarchive", true, false, "ChangeACL"); 
+	//trie-hp (servername); as-ELOarchive (nama repository); ChangeACl (nama as Direct)
+}
