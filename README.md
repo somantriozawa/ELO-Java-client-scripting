@@ -9,3 +9,4 @@ Keterangan Script
 - setUserName -- untuk mengisi value keywording dari username user logon
 - eloInsertDocumentEnd -- menjalankan ELOas Direct setelah upload dokumen (event)
 - getELOas -- menjalankan ELOas dari ribbon
+- donwloadPrint -- ribbon untuk pengechekan siapa yg boleh download dan print dr daftar user/group di index field
