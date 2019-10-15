@@ -1,0 +1,50 @@
+function checkId(arrId){
+	var loggedId = workspace.getUserId();
+	var loggedGroups = workspace.getUserGroups();
+	if(Packages.org.apache.commons.lang3.ArrayUtils.contains(arrId, loggedId + "")) return true;
+	else{
+		for (var i = loggedGroups.length - 1; i >= 0; i--) {
+			if(Packages.org.apache.commons.lang3.ArrayUtils.contains(arrId, loggedGroups[i] + "")) return true;
+		}
+		return false;
+	}
+}
+
+// Download ribbon 13;1;2;15;789
+function eloScriptButton58Start() {
+  var selected = workspace.getActiveView().getFirstSelected();
+  if (selected instanceof Packages.de.elo.client.scripting.items.ArchiveDocument) {
+    var sord = selected.getSord();
+    
+    var allowedIds = Packages.org.apache.commons.lang3.StringUtils.split(getIndexValueByName(sord, "ACLDWL"), ";"); //0;1;2;3
+    if (sord && selected.isDocument()) {
+      if (checkId(allowedIds)) {
+        var file = selected.getFile();
+        var dest = workspace.showFileChooserDialog(sord.name, true, false, null);
+        if (dest && dest.length > 0 && dest[0] instanceof Packages.java.io.File) {
+          try{
+            var destFile = new Packages.java.io.File(dest[0], sord.name+"."+sord.docVersion.ext);
+            Packages.org.apache.commons.io.FileUtils.copyFile(file, destFile);
+            workspace.showInfoBox("Success", "doc saved");
+          } catch (e){
+            if(e.javaException instanceof java.io.IOException) workspace.showAlertBox("Error", "Either file already exists or the directory is read only");
+          }
+        } else workspace.showAlertBox("Error", "No folders selected");
+      } else workspace.showAlertBox("Error", "You are not allowed to download this document");
+    } else workspace.showAlertBox("Error", "Select a file, not a folder" + loggedId + allowedIds);
+  } else workspace.showAlertBox("Error", "Select a document in repository first");
+}
+
+//Print rinbbon
+function eloScriptButton59Start() {
+  var selected = workspace.getActiveView().getFirstSelected();
+  if (selected instanceof Packages.de.elo.client.scripting.items.ArchiveDocument) {
+    var sord = selected.getSord();
+    var allowedIds = Packages.org.apache.commons.lang3.StringUtils.split(getIndexValueByName(sord, "ACLPRINT"), ";");
+    if (sord && selected.isDocument()) {
+      if (checkId(allowedIds)) {
+        selected.print();
+      } else workspace.showInfoBox("Error", "You are not allowed to download this document");
+    } else workspace.showInfoBox("Error", "Select a file, not a folder");
+  } else workspace.showInfoBox("Error", "Select a document in repository first");
+}
