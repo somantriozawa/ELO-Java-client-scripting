@@ -1,0 +1,35 @@
+importPackage(Packages.de.elo.client);
+importPackage(Packages.de.elo.ix.client);
+
+function eloIndexDialogSetDocMask() {
+	if ((!indexDialog.isSearch()) && ((indexDialog.docMaskName == "Dokumen Pembiayaan") ||
+
+		(indexDialog.docMaskName == "Dokumen Pembiayaan Khusus") ||
+		(indexDialog.docMaskName == "Dokumen Pembiayaan Berkelanjutan") ||
+        	(indexDialog.docMaskName == "Dokumen Pembiayaan PEMDA") ||
+		(indexDialog.docMaskName == "Equity") ||
+		(indexDialog.docMaskName == "Pembiayaan Syariah") ||
+		(indexDialog.docMaskName == "Shareholder Loan"))) {
+        	//if (indexDialog.getObjKey("ELOASSTATUS").getValue() == "") {
+			//if (indexDialog.getId() == -2) {
+				indexDialog.setObjKeyValue("ELOASSTATUS", "unprocessed");
+            //}
+        //}
+    }
+}
+
+function eloIndexDialogOkStart() {
+	if ((!indexDialog.isSearch()) && ((indexDialog.docMaskName == "Dokumen Pembiayaan") ||
+		(indexDialog.docMaskName == "Dokumen Pembiayaan Khusus") ||
+		(indexDialog.docMaskName == "Dokumen Pembiayaan Berkelanjutan") ||
+        	(indexDialog.docMaskName == "Dokumen Pembiayaan PEMDA") ||
+		(indexDialog.docMaskName == "Equity") ||
+		(indexDialog.docMaskName == "Pembiayaan Syariah") ||
+		(indexDialog.docMaskName == "Shareholder Loan"))) {
+        	//if (indexDialog.getObjKey("ELOASSTATUS").getValue() == "") {
+			//if (indexDialog.getId() == -2) {
+				indexDialog.setObjKeyValue("ELOASSTATUS", "unprocessed");
+            //}
+        //}
+    }
+}
