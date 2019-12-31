@@ -1,0 +1,20 @@
+importPackage(Packages.java.awt);
+importPackage(Packages.java.net);
+importPackage(Packages.de.elo.ix.client);
+importPackage(Packages.org.apache.commons.codec.net);
+
+function eloInsertDocumentEnd(document){
+    var daftar = java.lang.reflect.Array.newInstance(java.lang.String, 7); //ganti 1 dgn jumlah elemen di array;
+    daftar[0] = "Dokumen Pembiayaan";
+    daftar[1] = "Pembiayaan Syariah";
+    daftar[2] = "Dokumen Pembiayaan PEMDA";
+    daftar[3] = "Dokumen Pembiayaan Berkelanjutan";
+    daftar[4] = "Dokumen Pembiayaan Khusus";
+    daftar[5] = "Equity";
+    daftar[6] = "Shareholder Loan";
+    if(Packages.org.apache.commons.lang3.ArrayUtils.contains(daftar, document.getDocMaskName())){
+        var result = workspace.getELOas("newdms.ptsmi.co.id", 60, "as-SMIArc01", true, false, "setOff_kwf", document.getId());
+        workspace.setStatusMessage(result);
+    }
+else workspace.setStatusMessage(document.getDocMaskName());
+}
