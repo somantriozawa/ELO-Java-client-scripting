@@ -1,0 +1,9 @@
+function eloDocumentPreviewAvailable(){
+  preview.setExternalWindowVisible(false);
+  preview.setPdfPreference(false);
+}
+
+function eloPreviewDone(){
+  preview.setExternalWindowVisible(false);
+  preview.setPdfPreference(false);
+}
