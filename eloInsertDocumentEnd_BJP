@@ -1,0 +1,9 @@
+function eloInsertDocumentEnd(document){
+	if(document.getParent().getDocMaskId() == 5101 && document.getDocMaskId() == 5102){
+		// 5101: kwf folder; 5102: kwf yang akan di setting permission yang diupload kedalam keywording folder
+		workspace.getELOas("192.168.120.51", 9070, "as-TJB56", true, false, "bjp.acl.newdoc", document.id);
+		// bjsdevdms001: eloas server; 9070: port ELOas
+		document.setObjKeyValue("ACLTAKEOUT", document.getParent().getObjKeyValue("ACLTAKEOUT"));
+		document.saveSord();
+	}
+}
