@@ -1,0 +1,9 @@
+function eloInsertDocumentEnd(doc){
+    var thisSord = doc.loadSord();
+    //var parentSord = ixc.checkoutSord(String(thisSord.parentId), EditInfoC.mbSord, LockC.NO).sord; --> ELO 10
+    //var parentSord = ixc.checkoutSord(String(thisSord.parentId), SordC.mbLean, LockC.NO); --> ELO 12
+    if(parentSord.maskName == "Facultative Offer" && thisSord.maskName == "Basic Entry"){
+        thisSord.name = parentSord.name;
+        ixc.checkinSord(thisSord, SordC.mbLean, LockC.NO);
+    }
+}
