@@ -1,0 +1,12 @@
+// Terima Schedule
+function eloScriptButton116Start() {
+	var item = workspace.activeView.firstSelected;
+	if (item) {
+		if (item.docMaskName == "Treaty Code") {
+			ixc.startWorkFlow("Treaty - Offer_Terima Schedule", "Schedule: " + item.getObjKeyValue("TRTCODE"), item.id);
+			workspace.setFeedbackMessage("Terima Schedule workflow started.");
+		} else {
+			workspace.showInfoBox("Terima schedule", "Please choose a valid Treaty Code.");
+		}
+	}
+}
