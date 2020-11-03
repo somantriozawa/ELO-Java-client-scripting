@@ -1,0 +1,123 @@
+var importNames = JavaImporter();
+importNames.importPackage(Packages.de.elo.ix.client);
+importClass(Packages.de.elo.ix.client.EditInfoC);
+importClass(Packages.de.elo.ix.client.LockC);
+importClass(Packages.de.elo.ix.client.SordC);
+importPackage(Packages.java.lang);
+importPackage(Packages.de.elo.client.ioutil);
+importPackage(Packages.java.io);
+importPackage(Packages.java.awt);
+importPackage(Packages.java.net);
+importPackage(Packages.org.apache.commons.codec.net);
+importPackage(Packages.de.elo.ix.client);
+importPackage(Packages.de.elo.ix.jscript);
+importPackage(Packages.de.elo.ix.scripting);
+importPackage(Packages.de.elo.client.scripting.constants);
+
+// User interface
+function getExtraTabs() {
+    return "52,SMI;";
+}
+
+function getExtraBands() {
+    return "SMI,57,Tools;"
+}
+
+function getScriptButtonPositions() {
+    return "100,SMI,Tools"
+}
+
+function getScriptButton100Name() {
+    return "Arium (Covenant)"
+}
+
+function getScriptButton100Tooltip() {
+    return "Reset nama debitur sesuai Arium"
+}
+
+function eloScriptButton100Start() {
+    var dokDialog = workspace.createGridDialog("Pilih jenis dokumen", 2, 1);
+    var gridP = dokDialog.getGridPanel();
+    gridP.addLabel(1, 1, 1, "Jenis dokumen: ");
+    var jendokBox = gridP.addComboBox(2, 1, 1, getJendok(), false);
+    dokDialog.show(function (dialog, source) {
+        dialog.setStatusYellow("Loading. Mohon tunggu...");
+        var curJendok = jendokBox.getText();
+        var jendokFolder;
+        try {
+            jendokFolder = archive.getElementByArcpath("¶DPMO¶Covenant¶" + curJendok);
+        } catch (x) {
+            workspace.showAlertBox("Error", "Error ketika mengecek folder. Ada kemungkinan folder dengan jenis dokumen tersebut tidak ada\n" + x);
+            return -1;
+        }
+		var newFolders;
+		if(jendokBox.getText() == "Dokumen Pembiayaan"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Divisi Pengendalian Fasilitas Pembiayaan");
+		} else if(jendokBox.getText() == "Dokumen Pembiayaan Berkelanjutan"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Dokumen Pembiayaan Berkelanjutan");
+		} else if(jendokBox.getText() == "Dokumen Pembiayaan Khusus"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Dokumen Pembiayaan Khusus");
+		} else if(jendokBox.getText() == "Dokumen Pembiayaan PEMDA"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶PEMDA");
+		} else if(jendokBox.getText() == "Equity"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Equity");
+		} else if(jendokBox.getText() == "Pembiayaan Syariah"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Pembiayaan Syariah");
+		} else if(jendokBox.getText() == "Shareholder Loan"){
+			newFolders = archive.getElementByArcpath("¶DPMO¶Shareholder Loan");
+		} else {
+			return 1;
+		}
+        var dokDialog2 = workspace.createGridDialog("Pilih jenis dokumen", 2, 2);
+        var gridP2 = dokDialog2.getGridPanel();
+        gridP2.addLabel(1, 1, 1, "Nama debitur lama: ");
+        var oldDebiturBox = gridP2.addComboBox(2, 1, 1, childToList(jendokFolder.getChildrenList()), false);
+        gridP2.addLabel(1, 2, 1, "Nama debitur baru: ");
+        var newDebiturBox = gridP2.addComboBox(2, 2, 1, childToList(newFolders.getChildrenList()), false);
+        dokDialog2.show(function(dialog, source){
+            dialog.setStatusYellow("Loading. Mohon tunggu...");
+            var debiturFolder = archive.getElementByArcpathRelative(jendokFolder.getId(), "¶"+oldDebiturBox.getText());
+            var debiturSord = debiturFolder.loadSord();
+			debiturSord.name = newDebiturBox.getText();
+			ixc.checkinSord(debiturSord, SordC.mbMin, LockC.NO);
+            var fi = new FindInfo();
+            var fc = new FindChildren();
+            fc.parentId = String(debiturSord.id);
+            fc.endLevel = -1;
+            fi.findChildren = fc;
+            var fx = new FindByIndex();
+            fx.maskIds = java.lang.reflect.Array.newInstance(java.lang.String, 2);
+            fx.maskIds[0] = "Dokumen Convenant";
+            fx.maskIds[1] = "Generate Folder Convenant";
+            fi.findByIndex = fx;
+            var fr = ixc.findFirstSords(fi, 1000, SordC.mbAllIndex);
+            fr.sords.forEach(function(sord, idx){
+                utils.setObjKeyValue(sord, "DPMO_NAMADEBITUR", newDebiturBox.getText());
+                ixc.checkinSord(sord, new SordZ(SordC.mbObjKeys), LockC.NO);
+            });
+            workspace.setFeedbackMessage(Packages.de.elo.client.scripting.constants.CONSTANTS.FEEDBACK_TYPE.DONE, "Berhasil diproses");
+            return 1;
+        }, null, this);
+        return 1;
+    }, function () {
+
+    }, this);
+}
+
+function childToList(children) {
+    var values = [];
+    children.forEach(function (val, idx) {
+        values.push(val.getName());
+    });
+    return values;
+}
+
+
+function getJendok() {
+    var keyList = ixc.checkoutKeywordList("DPMO_JNSKWF", KeywordC.mbView, 0, LockC.NO);
+    var values = [];
+    keyList.children.forEach(function (val, idx) {
+        values.push(val.text);
+    });
+    return values;
+}
