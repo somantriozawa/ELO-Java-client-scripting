@@ -1,0 +1,6 @@
+function eloInsertDocumentEnd(sauceArch){
+    if(sauceArch.getDocMaskName() == "PKPT"){ // nama kwf
+        var destArch = archive.getElementByArcpath("¶EOFFICE¶INTERNAL AUDIT¶PUBLIC"); // folder destination
+        ixc.copySord(String(destArch.id), String(sauceArch.id), null, CopySordC.REFERENCE); // references
+    }
+}
